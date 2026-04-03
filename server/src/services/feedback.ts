@@ -1292,7 +1292,7 @@ async function buildAgentContext(
         entryBody,
       }
       : null,
-    ai-ceo: {
+    "ai-ceo": {
       schemaVersion: FEEDBACK_SCHEMA_VERSION,
       bundleVersion: FEEDBACK_BUNDLE_VERSION,
     },

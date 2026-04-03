@@ -245,10 +245,10 @@ function readCanonicalSkillKey(frontmatter: Record<string, unknown>, metadata: R
     ?? asString(metadata?.aiCeoSkillKey),
   );
   if (direct) return direct;
-  const ai-ceo = isPlainRecord(metadata?.ai-ceo) ? metadata?.ai-ceo as Record<string, unknown> : null;
+  const aiCeo = isPlainRecord(metadata?.["ai-ceo"]) ? metadata?.["ai-ceo"] as Record<string, unknown> : null;
   return normalizeSkillKey(
-    asString(ai-ceo?.skillKey)
-    ?? asString(ai-ceo?.key),
+    asString(aiCeo?.skillKey)
+    ?? asString(aiCeo?.key),
   );
 }
 
