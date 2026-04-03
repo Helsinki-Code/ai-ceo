@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: ai-ceo
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: >
+      corepack enable &&
+      pnpm install --frozen-lockfile &&
+      pnpm --filter @ai-ceo/shared build &&
+      pnpm --filter @ai-ceo/adapter-utils build &&
+      pnpm --filter @ai-ceo/plugin-sdk build &&
+      pnpm --filter @ai-ceo/ui build &&
+      pnpm --filter @ai-ceo/server build
+    startCommand: node --import ./server/node_modules/tsx/dist/loader.mjs server/dist/index.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3100"
+      - key: HOST
+        value: 0.0.0.0
+      - key: SERVE_UI
+        value: "true"
+      - key: AI_CEO_DEPLOYMENT_MODE
+        value: authenticated
+      - key: AI_CEO_DEPLOYMENT_EXPOSURE
+        value: private
+      - key: AI_CEO_PUBLIC_URL
+        value: https://ai-ceo.work
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-ceo-db
+          property: connectionString
+      - key: BETTER_AUTH_SECRET
+        generateValue: true
+      - key: ANTHROPIC_API_KEY
+        sync: false
+
+databases:
+  - name: ai-ceo-db
+    plan: free
+    region: oregon
