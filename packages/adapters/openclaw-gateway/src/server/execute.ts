@@ -421,7 +421,7 @@ function buildStandardAICEOPayload(
   aiCeoEnv: Record<string, string>,
   payloadTemplate: Record<string, unknown>,
 ): Record<string, unknown> {
-  const templateAiCeo = parseObject(payloadTemplate.ai-ceo);
+  const templateAiCeo = parseObject(payloadTemplate["ai-ceo"]);
   const workspace = asRecord(ctx.context.aiCeoWorkspace);
   const workspaces = Array.isArray(ctx.context.aiCeoWorkspaces)
     ? ctx.context.aiCeoWorkspaces.filter((entry): entry is Record<string, unknown> => Boolean(asRecord(entry)))
