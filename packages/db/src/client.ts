@@ -758,7 +758,7 @@ export async function ensurePostgresDatabase(
   url: string,
   databaseName: string,
 ): Promise<"created" | "exists"> {
-  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(databaseName)) {
+  if (!/^[A-Za-z_][A-Za-z0-9_-]*$/.test(databaseName)) {
     throw new Error(`Unsafe database name: ${databaseName}`);
   }
 
