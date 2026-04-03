@@ -1,4 +1,4 @@
-# @paperclipai/adapter-utils
+# @ai-ceo/adapter-utils
 
 ## 0.3.1
 

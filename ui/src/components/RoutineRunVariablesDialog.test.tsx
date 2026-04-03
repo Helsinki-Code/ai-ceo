@@ -3,7 +3,7 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { Project } from "@paperclipai/shared";
+import type { Project } from "@ai-ceo/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RoutineRunVariablesDialog } from "./RoutineRunVariablesDialog";
 
@@ -73,8 +73,8 @@ function createProject(): Project {
       defaultRef: null,
       repoName: null,
       localFolder: null,
-      managedFolder: "/tmp/paperclip/project-1",
-      effectiveLocalFolder: "/tmp/paperclip/project-1",
+      managedFolder: "/tmp/ai-ceo/project-1",
+      effectiveLocalFolder: "/tmp/ai-ceo/project-1",
       origin: "managed_checkout",
     },
     workspaces: [],

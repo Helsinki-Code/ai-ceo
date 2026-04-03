@@ -1,0 +1,23 @@
+[Unit]
+Description=AI CEO Agent Orchestrator
+Requires=ai-ceo-db.service
+After=ai-ceo-db.service
+
+[Container]
+Image=ai-ceo-local
+ContainerName=ai-ceo
+Pod=ai-ceo.pod
+Volume=%h/.local/share/ai-ceo:/ai-ceo:Z
+Environment=HOST=0.0.0.0
+Environment=AI_CEO_HOME=/ai-ceo
+Environment=PAPERCLIP_DEPLOYMENT_MODE=authenticated
+Environment=PAPERCLIP_DEPLOYMENT_EXPOSURE=private
+Environment=PAPERCLIP_PUBLIC_URL=http://localhost:3100
+EnvironmentFile=%h/.config/containers/systemd/ai-ceo.env
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=120
+
+[Install]
+WantedBy=default.target

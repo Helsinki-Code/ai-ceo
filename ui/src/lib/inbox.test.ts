@@ -9,7 +9,7 @@ import type {
   Issue,
   JoinRequest,
   ProjectWorkspace,
-} from "@paperclipai/shared";
+} from "@ai-ceo/shared";
 import {
   DEFAULT_INBOX_ISSUE_COLUMNS,
   computeInboxBadgeData,
@@ -614,7 +614,7 @@ describe("inbox helpers", () => {
   });
 
   it("maps legacy new-tab storage to mine", () => {
-    localStorage.setItem("paperclip:inbox:last-tab", "new");
+    localStorage.setItem("ai-ceo:inbox:last-tab", "new");
     expect(loadLastInboxTab()).toBe("mine");
   });
 

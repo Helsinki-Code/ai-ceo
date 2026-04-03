@@ -66,13 +66,13 @@ import {
   ListTree,
   MessageSquare,
   MoreHorizontal,
-  Paperclip,
+  AI CEO,
   Repeat,
   SlidersHorizontal,
   Trash2,
 } from "lucide-react";
-import type { ActivityEvent } from "@paperclipai/shared";
-import type { Agent, FeedbackVote, Issue, IssueAttachment, IssueComment } from "@paperclipai/shared";
+import type { ActivityEvent } from "@ai-ceo/shared";
+import type { Agent, FeedbackVote, Issue, IssueAttachment, IssueComment } from "@ai-ceo/shared";
 
 type CommentReassignment = IssueCommentReassignment;
 type IssueDetailComment = (IssueComment | OptimisticIssueComment) & {
@@ -108,7 +108,7 @@ const ACTION_LABELS: Record<string, string> = {
   "approval.rejected": "rejected",
 };
 
-const FEEDBACK_TERMS_URL = import.meta.env.VITE_FEEDBACK_TERMS_URL?.trim() || "https://paperclip.ing/tos";
+const FEEDBACK_TERMS_URL = import.meta.env.VITE_FEEDBACK_TERMS_URL?.trim() || "https://ai-ceo.ing/tos";
 
 function humanizeValue(value: unknown): string {
   if (typeof value !== "string") return String(value ?? "none");
@@ -1122,7 +1122,7 @@ export function IssueDetail() {
           attachmentDragActive && "border-primary bg-primary/5",
         )}
       >
-        <Paperclip className="h-3.5 w-3.5 mr-1.5" />
+        <AI CEO className="h-3.5 w-3.5 mr-1.5" />
         {uploadAttachment.isPending || importMarkdownDocument.isPending ? "Uploading..." : (
           <>
             <span className="hidden sm:inline">Upload attachment</span>
@@ -1512,7 +1512,7 @@ export function IssueDetail() {
             issueStatus={issue.status}
             agentMap={agentMap}
             currentUserId={currentUserId}
-            draftKey={`paperclip:issue-comment-draft:${issue.id}`}
+            draftKey={`ai-ceo:issue-comment-draft:${issue.id}`}
             enableReassign
             reassignOptions={commentReassignOptions}
             currentAssigneeValue={actualAssigneeValue}

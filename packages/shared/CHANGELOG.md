@@ -1,4 +1,4 @@
-# @paperclipai/shared
+# @ai-ceo/shared
 
 ## 0.3.1
 

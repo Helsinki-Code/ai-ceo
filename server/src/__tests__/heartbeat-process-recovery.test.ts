@@ -10,7 +10,7 @@ import {
   heartbeatRunEvents,
   heartbeatRuns,
   issues,
-} from "@paperclipai/db";
+} from "@ai-ceo/db";
 import {
   getEmbeddedPostgresTestSupport,
   startEmbeddedPostgresTestDatabase,
@@ -23,9 +23,9 @@ vi.mock("../telemetry.ts", () => ({
   getTelemetryClient: () => mockTelemetryClient,
 }));
 
-vi.mock("@paperclipai/shared/telemetry", async () => {
-  const actual = await vi.importActual<typeof import("@paperclipai/shared/telemetry")>(
-    "@paperclipai/shared/telemetry",
+vi.mock("@ai-ceo/shared/telemetry", async () => {
+  const actual = await vi.importActual<typeof import("@ai-ceo/shared/telemetry")>(
+    "@ai-ceo/shared/telemetry",
   );
   return {
     ...actual,
@@ -55,7 +55,7 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
   const childProcesses = new Set<ChildProcess>();
 
   beforeAll(async () => {
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-heartbeat-recovery-");
+    tempDb = await startEmbeddedPostgresTestDatabase("ai-ceo-heartbeat-recovery-");
     db = createDb(tempDb.connectionString);
   }, 20_000);
 
@@ -103,7 +103,7 @@ describeEmbeddedPostgres("heartbeat orphaned process recovery", () => {
 
     await db.insert(companies).values({
       id: companyId,
-      name: "Paperclip",
+      name: "AI CEO",
       issuePrefix,
       requireBoardApprovalForNewAgents: false,
     });

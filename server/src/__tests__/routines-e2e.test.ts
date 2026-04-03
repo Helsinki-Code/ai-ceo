@@ -21,7 +21,7 @@ import {
   routineRuns,
   routines,
   routineTriggers,
-} from "@paperclipai/db";
+} from "@ai-ceo/db";
 import {
   getEmbeddedPostgresTestSupport,
   startEmbeddedPostgresTestDatabase,
@@ -33,7 +33,7 @@ vi.mock("../services/index.js", async () => {
   const actual = await vi.importActual<typeof import("../services/index.js")>("../services/index.js");
   const { randomUUID } = await import("node:crypto");
   const { eq } = await import("drizzle-orm");
-  const { heartbeatRuns, issues } = await import("@paperclipai/db");
+  const { heartbeatRuns, issues } = await import("@ai-ceo/db");
 
   return {
     ...actual,
@@ -92,7 +92,7 @@ describeEmbeddedPostgres("routine routes end-to-end", () => {
   let tempDb: Awaited<ReturnType<typeof startEmbeddedPostgresTestDatabase>> | null = null;
 
   beforeAll(async () => {
-    tempDb = await startEmbeddedPostgresTestDatabase("paperclip-routines-e2e-");
+    tempDb = await startEmbeddedPostgresTestDatabase("ai-ceo-routines-e2e-");
     db = createDb(tempDb.connectionString);
   }, 20_000);
 
@@ -141,7 +141,7 @@ describeEmbeddedPostgres("routine routes end-to-end", () => {
 
     await db.insert(companies).values({
       id: companyId,
-      name: "Paperclip",
+      name: "AI CEO",
       issuePrefix,
       requireBoardApprovalForNewAgents: false,
     });
@@ -306,13 +306,13 @@ describeEmbeddedPostgres("routine routes end-to-end", () => {
       .post(`/api/routines/${createRes.body.id}/run`)
       .send({
         source: "manual",
-        variables: { repo: "paperclip" },
+        variables: { repo: "ai-ceo" },
       });
 
     expect(runRes.status).toBe(202);
     expect(runRes.body.triggerPayload).toEqual({
       variables: {
-        repo: "paperclip",
+        repo: "ai-ceo",
         priority: "high",
       },
     });
@@ -322,7 +322,7 @@ describeEmbeddedPostgres("routine routes end-to-end", () => {
       .from(issues)
       .where(eq(issues.id, runRes.body.linkedIssueId));
 
-    expect(issue?.description).toBe("Review paperclip for high bugs");
+    expect(issue?.description).toBe("Review ai-ceo for high bugs");
   });
 
   it("persists execution workspace selections from manual routine runs", async () => {

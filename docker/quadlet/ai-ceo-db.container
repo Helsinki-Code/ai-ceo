@@ -1,12 +1,12 @@
 [Unit]
-Description=PostgreSQL for Paperclip
+Description=PostgreSQL for AI CEO
 
 [Container]
 Image=docker.io/library/postgres:17-alpine
-ContainerName=paperclip-db
-Pod=paperclip.pod
-Volume=paperclip-pgdata:/var/lib/postgresql/data
-EnvironmentFile=%h/.config/containers/systemd/paperclip.env
+ContainerName=ai-ceo-db
+Pod=ai-ceo.pod
+Volume=ai-ceo-pgdata:/var/lib/postgresql/data
+EnvironmentFile=%h/.config/containers/systemd/ai-ceo.env
 HealthCmd=pg_isready -U $POSTGRES_USER -d $POSTGRES_DB -h localhost || exit 1
 HealthInterval=15s
 HealthTimeout=5s

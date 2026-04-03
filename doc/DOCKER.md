@@ -1,13 +1,13 @@
 # Docker Quickstart
 
-Run Paperclip in Docker without installing Node or pnpm locally.
+Run AI CEO in Docker without installing Node or pnpm locally.
 
 All commands below assume you are in the **project root** (the directory containing `package.json`), not inside `docker/`.
 
 ## Building the image
 
 ```sh
-docker build -t paperclip-local .
+docker build -t ai-ceo-local .
 ```
 
 The Dockerfile installs common agent tools (`git`, `gh`, `curl`, `wget`, `ripgrep`, `python3`) and the Claude, Codex, and OpenCode CLIs.
@@ -20,21 +20,21 @@ Build arguments:
 | `USER_GID` | `1000` | GID for the container `node` group |
 
 ```sh
-docker build -t paperclip-local \
+docker build -t ai-ceo-local \
   --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) .
 ```
 
 ## One-liner (build + run)
 
 ```sh
-docker build -t paperclip-local . && \
-docker run --name paperclip \
+docker build -t ai-ceo-local . && \
+docker run --name ai-ceo \
   -p 3100:3100 \
   -e HOST=0.0.0.0 \
-  -e PAPERCLIP_HOME=/paperclip \
+  -e AI_CEO_HOME=/ai-ceo \
   -e BETTER_AUTH_SECRET=$(openssl rand -hex 32) \
-  -v "$(pwd)/data/docker-paperclip:/paperclip" \
-  paperclip-local
+  -v "$(pwd)/data/docker-ai-ceo:/ai-ceo" \
+  ai-ceo-local
 ```
 
 Open: `http://localhost:3100`
@@ -46,7 +46,7 @@ Data persistence:
 - local secrets key
 - local agent workspace data
 
-All persisted under your bind mount (`./data/docker-paperclip` in the example above).
+All persisted under your bind mount (`./data/docker-ai-ceo` in the example above).
 
 ## Docker Compose
 
@@ -62,31 +62,31 @@ BETTER_AUTH_SECRET=$(openssl rand -hex 32) \
 Defaults:
 
 - host port: `3100`
-- persistent data dir: `./data/docker-paperclip`
+- persistent data dir: `./data/docker-ai-ceo`
 
 Optional overrides:
 
 ```sh
-PAPERCLIP_PORT=3200 PAPERCLIP_DATA_DIR=../data/pc \
+AI_CEO_PORT=3200 AI_CEO_DATA_DIR=../data/pc \
   docker compose -f docker/docker-compose.quickstart.yml up --build
 ```
 
-**Note:** `PAPERCLIP_DATA_DIR` is resolved relative to the compose file (`docker/`), so `../data/pc` maps to `data/pc` in the project root.
+**Note:** `AI_CEO_DATA_DIR` is resolved relative to the compose file (`docker/`), so `../data/pc` maps to `data/pc` in the project root.
 
-If you change host port or use a non-local domain, set `PAPERCLIP_PUBLIC_URL` to the external URL you will use in browser/auth flows.
+If you change host port or use a non-local domain, set `AI_CEO_PUBLIC_URL` to the external URL you will use in browser/auth flows.
 
 Pass `OPENAI_API_KEY` and/or `ANTHROPIC_API_KEY` to enable local adapter runs.
 
 ### Full stack (with PostgreSQL)
 
-Paperclip server + PostgreSQL 17. The database is health-checked before the server starts.
+AI CEO server + PostgreSQL 17. The database is health-checked before the server starts.
 
 ```sh
 BETTER_AUTH_SECRET=$(openssl rand -hex 32) \
   docker compose -f docker/docker-compose.yml up --build
 ```
 
-PostgreSQL data persists in a named Docker volume (`pgdata`). Paperclip data persists in `paperclip-data`.
+PostgreSQL data persists in a named Docker volume (`pgdata`). AI CEO data persists in `ai-ceo-data`.
 
 ### Untrusted PR review
 
@@ -99,27 +99,27 @@ docker compose -f docker/docker-compose.untrusted-review.yml run --rm --service-
 
 ## Authenticated Compose (Single Public URL)
 
-For authenticated deployments, set one canonical public URL and let Paperclip derive auth/callback defaults:
+For authenticated deployments, set one canonical public URL and let AI CEO derive auth/callback defaults:
 
 ```yaml
 services:
-  paperclip:
+  ai-ceo:
     environment:
-      PAPERCLIP_DEPLOYMENT_MODE: authenticated
-      PAPERCLIP_DEPLOYMENT_EXPOSURE: private
-      PAPERCLIP_PUBLIC_URL: https://desk.koker.net
+      AI_CEO_DEPLOYMENT_MODE: authenticated
+      AI_CEO_DEPLOYMENT_EXPOSURE: private
+      AI_CEO_PUBLIC_URL: https://desk.koker.net
 ```
 
-`PAPERCLIP_PUBLIC_URL` is used as the primary source for:
+`AI_CEO_PUBLIC_URL` is used as the primary source for:
 
 - auth public base URL
 - Better Auth base URL defaults
 - bootstrap invite URL defaults
 - hostname allowlist defaults (hostname extracted from URL)
 
-Granular overrides remain available if needed (`PAPERCLIP_AUTH_PUBLIC_BASE_URL`, `BETTER_AUTH_URL`, `BETTER_AUTH_TRUSTED_ORIGINS`, `PAPERCLIP_ALLOWED_HOSTNAMES`).
+Granular overrides remain available if needed (`AI_CEO_AUTH_PUBLIC_BASE_URL`, `BETTER_AUTH_URL`, `BETTER_AUTH_TRUSTED_ORIGINS`, `AI_CEO_ALLOWED_HOSTNAMES`).
 
-Set `PAPERCLIP_ALLOWED_HOSTNAMES` explicitly only when you need additional hostnames beyond the public URL host (for example Tailscale/LAN aliases or multiple private hostnames).
+Set `AI_CEO_ALLOWED_HOSTNAMES` explicitly only when you need additional hostnames beyond the public URL host (for example Tailscale/LAN aliases or multiple private hostnames).
 
 ## Claude + Codex Local Adapters in Docker
 
@@ -131,30 +131,30 @@ The image pre-installs:
 If you want local adapter runs inside the container, pass API keys when starting the container:
 
 ```sh
-docker run --name paperclip \
+docker run --name ai-ceo \
   -p 3100:3100 \
   -e HOST=0.0.0.0 \
-  -e PAPERCLIP_HOME=/paperclip \
+  -e AI_CEO_HOME=/ai-ceo \
   -e OPENAI_API_KEY=... \
   -e ANTHROPIC_API_KEY=... \
-  -v "$(pwd)/data/docker-paperclip:/paperclip" \
-  paperclip-local
+  -v "$(pwd)/data/docker-ai-ceo:/ai-ceo" \
+  ai-ceo-local
 ```
 
 Notes:
 
 - Without API keys, the app still runs normally.
-- Adapter environment checks in Paperclip will surface missing auth/CLI prerequisites.
+- Adapter environment checks in AI CEO will surface missing auth/CLI prerequisites.
 
 ## Podman Quadlet (systemd)
 
-The `docker/quadlet/` directory contains unit files to run Paperclip + PostgreSQL as systemd services via Podman Quadlet.
+The `docker/quadlet/` directory contains unit files to run AI CEO + PostgreSQL as systemd services via Podman Quadlet.
 
 | File | Purpose |
 |------|---------|
-| `docker/quadlet/paperclip.pod` | Pod definition — groups containers into a shared network namespace |
-| `docker/quadlet/paperclip.container` | Paperclip server — joins the pod, connects to Postgres at `127.0.0.1` |
-| `docker/quadlet/paperclip-db.container` | PostgreSQL 17 — joins the pod, health-checked |
+| `docker/quadlet/ai-ceo.pod` | Pod definition — groups containers into a shared network namespace |
+| `docker/quadlet/ai-ceo.container` | AI CEO server — joins the pod, connects to Postgres at `127.0.0.1` |
+| `docker/quadlet/ai-ceo-db.container` | PostgreSQL 17 — joins the pod, health-checked |
 
 ### Setup
 
@@ -175,12 +175,12 @@ The `docker/quadlet/` directory contains unit files to run Paperclip + PostgreSQ
 3. Create a secrets env file (keep out of version control):
 
    ```sh
-   cat > ~/.config/containers/systemd/paperclip.env <<EOL
+   cat > ~/.config/containers/systemd/ai-ceo.env <<EOL
    BETTER_AUTH_SECRET=$(openssl rand -hex 32)
-   POSTGRES_USER=paperclip
-   POSTGRES_PASSWORD=paperclip
-   POSTGRES_DB=paperclip
-   DATABASE_URL=postgres://paperclip:paperclip@127.0.0.1:5432/paperclip
+   POSTGRES_USER=ai-ceo
+   POSTGRES_PASSWORD=ai-ceo
+   POSTGRES_DB=ai-ceo
+   DATABASE_URL=postgres://ai-ceo:ai-ceo@127.0.0.1:5432/ai-ceo
    # OPENAI_API_KEY=sk-...
    # ANTHROPIC_API_KEY=sk-...
    EOL
@@ -189,34 +189,34 @@ The `docker/quadlet/` directory contains unit files to run Paperclip + PostgreSQ
 4. Create the data directory and start:
 
    ```sh
-   mkdir -p ~/.local/share/paperclip
+   mkdir -p ~/.local/share/ai-ceo
    systemctl --user daemon-reload
-   systemctl --user start paperclip-pod
+   systemctl --user start ai-ceo-pod
    ```
 
 ### Quadlet management
 
 ```sh
-journalctl --user -u paperclip -f        # App logs
-journalctl --user -u paperclip-db -f     # DB logs
-systemctl --user status paperclip-pod    # Pod status
-systemctl --user restart paperclip-pod   # Restart all
-systemctl --user stop paperclip-pod      # Stop all
+journalctl --user -u ai-ceo -f        # App logs
+journalctl --user -u ai-ceo-db -f     # DB logs
+systemctl --user status ai-ceo-pod    # Pod status
+systemctl --user restart ai-ceo-pod   # Restart all
+systemctl --user stop ai-ceo-pod      # Stop all
 ```
 
 ### Quadlet notes
 
-- **First boot**: Unlike Docker Compose's `condition: service_healthy`, Quadlet's `After=` only waits for the DB unit to *start*, not for PostgreSQL to be ready. On a cold first boot you may see one or two restart attempts in `journalctl --user -u paperclip` while PostgreSQL initialises — this is expected and resolves automatically via `Restart=on-failure`.
-- Containers in a pod share `localhost`, so Paperclip reaches Postgres at `127.0.0.1:5432`.
-- PostgreSQL data persists in the `paperclip-pgdata` named volume.
-- Paperclip data persists at `~/.local/share/paperclip`.
+- **First boot**: Unlike Docker Compose's `condition: service_healthy`, Quadlet's `After=` only waits for the DB unit to *start*, not for PostgreSQL to be ready. On a cold first boot you may see one or two restart attempts in `journalctl --user -u ai-ceo` while PostgreSQL initialises — this is expected and resolves automatically via `Restart=on-failure`.
+- Containers in a pod share `localhost`, so AI CEO reaches Postgres at `127.0.0.1:5432`.
+- PostgreSQL data persists in the `ai-ceo-pgdata` named volume.
+- AI CEO data persists at `~/.local/share/ai-ceo`.
 - For rootful quadlet deployment, remove `%h` prefixes and use absolute paths.
 
 ## Onboard Smoke Test (Ubuntu + npm only)
 
 Use this when you want to mimic a fresh machine that only has Ubuntu + npm and verify:
 
-- `npx paperclipai onboard --yes` completes
+- `npx ai-ceo onboard --yes` completes
 - the server binds to `0.0.0.0:3100` so host access works
 - onboard/run banners and startup logs are visible in your terminal
 
@@ -231,9 +231,9 @@ Open: `http://localhost:3131` (default smoke host port)
 Useful overrides:
 
 ```sh
-HOST_PORT=3200 PAPERCLIPAI_VERSION=latest ./scripts/docker-onboard-smoke.sh
-PAPERCLIP_DEPLOYMENT_MODE=authenticated PAPERCLIP_DEPLOYMENT_EXPOSURE=private ./scripts/docker-onboard-smoke.sh
-SMOKE_DETACH=true SMOKE_METADATA_FILE=/tmp/paperclip-smoke.env PAPERCLIPAI_VERSION=latest ./scripts/docker-onboard-smoke.sh
+HOST_PORT=3200 AI_CEOAI_VERSION=latest ./scripts/docker-onboard-smoke.sh
+AI_CEO_DEPLOYMENT_MODE=authenticated AI_CEO_DEPLOYMENT_EXPOSURE=private ./scripts/docker-onboard-smoke.sh
+SMOKE_DETACH=true SMOKE_METADATA_FILE=/tmp/ai-ceo-smoke.env AI_CEOAI_VERSION=latest ./scripts/docker-onboard-smoke.sh
 ```
 
 Notes:
@@ -241,9 +241,9 @@ Notes:
 - Persistent data is mounted at `./data/docker-onboard-smoke` by default.
 - Container runtime user id defaults to your local `id -u` so the mounted data dir stays writable while avoiding root runtime.
 - Smoke script defaults to `authenticated/private` mode so `HOST=0.0.0.0` can be exposed to the host.
-- Smoke script defaults host port to `3131` to avoid conflicts with local Paperclip on `3100`.
-- Smoke script also defaults `PAPERCLIP_PUBLIC_URL` to `http://localhost:<HOST_PORT>` so bootstrap invite URLs and auth callbacks use the reachable host port instead of the container's internal `3100`.
-- In authenticated mode, the smoke script defaults `SMOKE_AUTO_BOOTSTRAP=true` and drives the real bootstrap path automatically: it signs up a real user, runs `paperclipai auth bootstrap-ceo` inside the container to mint a real bootstrap invite, accepts that invite over HTTP, and verifies board session access.
+- Smoke script defaults host port to `3131` to avoid conflicts with local AI CEO on `3100`.
+- Smoke script also defaults `AI_CEO_PUBLIC_URL` to `http://localhost:<HOST_PORT>` so bootstrap invite URLs and auth callbacks use the reachable host port instead of the container's internal `3100`.
+- In authenticated mode, the smoke script defaults `SMOKE_AUTO_BOOTSTRAP=true` and drives the real bootstrap path automatically: it signs up a real user, runs `ai-ceo auth bootstrap-ceo` inside the container to mint a real bootstrap invite, accepts that invite over HTTP, and verifies board session access.
 - Run the script in the foreground to watch the onboarding flow; stop with `Ctrl+C` after validation.
 - Set `SMOKE_DETACH=true` to leave the container running for automation and optionally write shell-ready metadata to `SMOKE_METADATA_FILE`.
 - The image definition is in `docker/Dockerfile.onboard-smoke`.
@@ -251,4 +251,4 @@ Notes:
 ## General Notes
 
 - The `docker-entrypoint.sh` adjusts the container `node` user UID/GID at startup to match the values passed via `USER_UID`/`USER_GID`, avoiding permission issues on bind-mounted volumes.
-- Paperclip data persists via Docker volumes/bind mounts (compose) or at `~/.local/share/paperclip` (quadlet).
+- AI CEO data persists via Docker volumes/bind mounts (compose) or at `~/.local/share/ai-ceo` (quadlet).

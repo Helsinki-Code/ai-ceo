@@ -5,14 +5,14 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   listGeminiSkills,
   syncGeminiSkills,
-} from "@paperclipai/adapter-gemini-local/server";
+} from "@ai-ceo/adapter-gemini-local/server";
 
 async function makeTempDir(prefix: string): Promise<string> {
   return fs.mkdtemp(path.join(os.tmpdir(), prefix));
 }
 
 describe("gemini local skill sync", () => {
-  const paperclipKey = "paperclipai/paperclip/paperclip";
+  const aiCeoKey = "ai-ceo/ai-ceo/ai-ceo";
   const cleanupDirs = new Set<string>();
 
   afterEach(async () => {
@@ -20,8 +20,8 @@ describe("gemini local skill sync", () => {
     cleanupDirs.clear();
   });
 
-  it("reports configured Paperclip skills and installs them into the Gemini skills home", async () => {
-    const home = await makeTempDir("paperclip-gemini-skill-sync-");
+  it("reports configured AI CEO skills and installs them into the Gemini skills home", async () => {
+    const home = await makeTempDir("ai-ceo-gemini-skill-sync-");
     cleanupDirs.add(home);
 
     const ctx = {
@@ -32,25 +32,25 @@ describe("gemini local skill sync", () => {
         env: {
           HOME: home,
         },
-        paperclipSkillSync: {
-          desiredSkills: [paperclipKey],
+        aiCeoSkillSync: {
+          desiredSkills: [aiCeoKey],
         },
       },
     } as const;
 
     const before = await listGeminiSkills(ctx);
     expect(before.mode).toBe("persistent");
-    expect(before.desiredSkills).toContain(paperclipKey);
-    expect(before.entries.find((entry) => entry.key === paperclipKey)?.required).toBe(true);
-    expect(before.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("missing");
+    expect(before.desiredSkills).toContain(aiCeoKey);
+    expect(before.entries.find((entry) => entry.key === aiCeoKey)?.required).toBe(true);
+    expect(before.entries.find((entry) => entry.key === aiCeoKey)?.state).toBe("missing");
 
-    const after = await syncGeminiSkills(ctx, [paperclipKey]);
-    expect(after.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("installed");
-    expect((await fs.lstat(path.join(home, ".gemini", "skills", "paperclip"))).isSymbolicLink()).toBe(true);
+    const after = await syncGeminiSkills(ctx, [aiCeoKey]);
+    expect(after.entries.find((entry) => entry.key === aiCeoKey)?.state).toBe("installed");
+    expect((await fs.lstat(path.join(home, ".gemini", "skills", "ai-ceo"))).isSymbolicLink()).toBe(true);
   });
 
-  it("keeps required bundled Paperclip skills installed even when the desired set is emptied", async () => {
-    const home = await makeTempDir("paperclip-gemini-skill-prune-");
+  it("keeps required bundled AI CEO skills installed even when the desired set is emptied", async () => {
+    const home = await makeTempDir("ai-ceo-gemini-skill-prune-");
     cleanupDirs.add(home);
 
     const configuredCtx = {
@@ -61,13 +61,13 @@ describe("gemini local skill sync", () => {
         env: {
           HOME: home,
         },
-        paperclipSkillSync: {
-          desiredSkills: [paperclipKey],
+        aiCeoSkillSync: {
+          desiredSkills: [aiCeoKey],
         },
       },
     } as const;
 
-    await syncGeminiSkills(configuredCtx, [paperclipKey]);
+    await syncGeminiSkills(configuredCtx, [aiCeoKey]);
 
     const clearedCtx = {
       ...configuredCtx,
@@ -75,15 +75,15 @@ describe("gemini local skill sync", () => {
         env: {
           HOME: home,
         },
-        paperclipSkillSync: {
+        aiCeoSkillSync: {
           desiredSkills: [],
         },
       },
     } as const;
 
     const after = await syncGeminiSkills(clearedCtx, []);
-    expect(after.desiredSkills).toContain(paperclipKey);
-    expect(after.entries.find((entry) => entry.key === paperclipKey)?.state).toBe("installed");
-    expect((await fs.lstat(path.join(home, ".gemini", "skills", "paperclip"))).isSymbolicLink()).toBe(true);
+    expect(after.desiredSkills).toContain(aiCeoKey);
+    expect(after.entries.find((entry) => entry.key === aiCeoKey)?.state).toBe("installed");
+    expect((await fs.lstat(path.join(home, ".gemini", "skills", "ai-ceo"))).isSymbolicLink()).toBe(true);
   });
 });

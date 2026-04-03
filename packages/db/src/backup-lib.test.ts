@@ -23,7 +23,7 @@ function createTempDir(prefix: string): string {
 }
 
 async function createTempDatabase(): Promise<string> {
-  const db = await startEmbeddedPostgresTestDatabase("paperclip-db-backup-");
+  const db = await startEmbeddedPostgresTestDatabase("ai-ceo-db-backup-");
   cleanups.push(db.cleanup);
   return db.connectionString;
 }
@@ -52,7 +52,7 @@ if (!embeddedPostgresSupport.supported) {
 
 describe("createBufferedTextFileWriter", () => {
   it("preserves line boundaries across buffered flushes", async () => {
-    const tempDir = createTempDir("paperclip-buffered-writer-");
+    const tempDir = createTempDir("ai-ceo-buffered-writer-");
     const outputPath = path.join(tempDir, "backup.sql");
     const writer = createBufferedTextFileWriter(outputPath, 16);
     const lines = [
@@ -80,9 +80,9 @@ describeEmbeddedPostgres("runDatabaseBackup", () => {
       const sourceConnectionString = await createTempDatabase();
       const restoreConnectionString = await createSiblingDatabase(
         sourceConnectionString,
-        "paperclip_restore_target",
+        "ai_ceo_restore_target",
       );
-      const backupDir = createTempDir("paperclip-db-backup-output-");
+      const backupDir = createTempDir("ai-ceo-db-backup-output-");
       const sourceSql = postgres(sourceConnectionString, { max: 1, onnotice: () => {} });
       const restoreSql = postgres(restoreConnectionString, { max: 1, onnotice: () => {} });
 
@@ -126,10 +126,10 @@ describeEmbeddedPostgres("runDatabaseBackup", () => {
           connectionString: sourceConnectionString,
           backupDir,
           retentionDays: 7,
-          filenamePrefix: "paperclip-test",
+          filenamePrefix: "ai-ceo-test",
         });
 
-        expect(result.backupFile).toMatch(/paperclip-test-.*\.sql$/);
+        expect(result.backupFile).toMatch(/ai-ceo-test-.*\.sql$/);
         expect(result.sizeBytes).toBeGreaterThan(1024 * 1024);
         expect(fs.existsSync(result.backupFile)).toBe(true);
 

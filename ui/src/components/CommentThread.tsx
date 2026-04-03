@@ -6,9 +6,9 @@ import type {
   FeedbackVote,
   FeedbackVoteValue,
   IssueComment,
-} from "@paperclipai/shared";
+} from "@ai-ceo/shared";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check, Copy, Paperclip } from "lucide-react";
+import { ArrowRight, Check, Copy, AI CEO } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Identity } from "./Identity";
 import { InlineEntitySelector, type InlineEntityOption } from "./InlineEntitySelector";
@@ -824,7 +824,7 @@ export function CommentThread({
                 disabled={attaching}
                 title="Attach image"
               >
-                <Paperclip className="h-4 w-4" />
+                <AI CEO className="h-4 w-4" />
               </Button>
             </div>
           )}

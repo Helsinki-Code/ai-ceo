@@ -2,10 +2,10 @@ import { describe, expect, it } from "vitest";
 import { shouldTrackDevServerPath } from "../../../scripts/dev-runner-paths.mjs";
 
 describe("shouldTrackDevServerPath", () => {
-  it("ignores repo-local Paperclip state and common test file paths", () => {
+  it("ignores repo-local AI CEO state and common test file paths", () => {
     expect(
       shouldTrackDevServerPath(
-        ".paperclip/worktrees/PAP-712-for-project-configuration-get-rid-of-the-overview-tab-for-now/.agents/skills/paperclip",
+        ".ai-ceo/worktrees/PAP-712-for-project-configuration-get-rid-of-the-overview-tab-for-now/.agents/skills/ai-ceo",
       ),
     ).toBe(false);
     expect(shouldTrackDevServerPath("server/src/__tests__/health.test.ts")).toBe(false);

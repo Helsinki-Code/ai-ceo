@@ -5,35 +5,35 @@ summary: Onboard, run, doctor, and configure
 
 Instance setup and diagnostics commands.
 
-## `paperclipai run`
+## `ai-ceo run`
 
 One-command bootstrap and start:
 
 ```sh
-pnpm paperclipai run
+pnpm ai-ceo run
 ```
 
 Does:
 
 1. Auto-onboards if config is missing
-2. Runs `paperclipai doctor` with repair enabled
+2. Runs `ai-ceo doctor` with repair enabled
 3. Starts the server when checks pass
 
 Choose a specific instance:
 
 ```sh
-pnpm paperclipai run --instance dev
+pnpm ai-ceo run --instance dev
 ```
 
-## `paperclipai onboard`
+## `ai-ceo onboard`
 
 Interactive first-time setup:
 
 ```sh
-pnpm paperclipai onboard
+pnpm ai-ceo onboard
 ```
 
-If Paperclip is already configured, rerunning `onboard` keeps the existing config in place. Use `paperclipai configure` to change settings on an existing install.
+If AI CEO is already configured, rerunning `onboard` keeps the existing config in place. Use `ai-ceo configure` to change settings on an existing install.
 
 First prompt:
 
@@ -43,24 +43,24 @@ First prompt:
 Start immediately after onboarding:
 
 ```sh
-pnpm paperclipai onboard --run
+pnpm ai-ceo onboard --run
 ```
 
 Non-interactive defaults + immediate start (opens browser on server listen):
 
 ```sh
-pnpm paperclipai onboard --yes
+pnpm ai-ceo onboard --yes
 ```
 
-On an existing install, `--yes` now preserves the current config and just starts Paperclip with that setup.
+On an existing install, `--yes` now preserves the current config and just starts AI CEO with that setup.
 
-## `paperclipai doctor`
+## `ai-ceo doctor`
 
 Health checks with optional auto-repair:
 
 ```sh
-pnpm paperclipai doctor
-pnpm paperclipai doctor --repair
+pnpm ai-ceo doctor
+pnpm ai-ceo doctor --repair
 ```
 
 Validates:
@@ -71,51 +71,51 @@ Validates:
 - Storage configuration
 - Missing key files
 
-## `paperclipai configure`
+## `ai-ceo configure`
 
 Update configuration sections:
 
 ```sh
-pnpm paperclipai configure --section server
-pnpm paperclipai configure --section secrets
-pnpm paperclipai configure --section storage
+pnpm ai-ceo configure --section server
+pnpm ai-ceo configure --section secrets
+pnpm ai-ceo configure --section storage
 ```
 
-## `paperclipai env`
+## `ai-ceo env`
 
 Show resolved environment configuration:
 
 ```sh
-pnpm paperclipai env
+pnpm ai-ceo env
 ```
 
-## `paperclipai allowed-hostname`
+## `ai-ceo allowed-hostname`
 
 Allow a private hostname for authenticated/private mode:
 
 ```sh
-pnpm paperclipai allowed-hostname my-tailscale-host
+pnpm ai-ceo allowed-hostname my-tailscale-host
 ```
 
 ## Local Storage Paths
 
 | Data | Default Path |
 |------|-------------|
-| Config | `~/.paperclip/instances/default/config.json` |
-| Database | `~/.paperclip/instances/default/db` |
-| Logs | `~/.paperclip/instances/default/logs` |
-| Storage | `~/.paperclip/instances/default/data/storage` |
-| Secrets key | `~/.paperclip/instances/default/secrets/master.key` |
+| Config | `~/.ai-ceo/instances/default/config.json` |
+| Database | `~/.ai-ceo/instances/default/db` |
+| Logs | `~/.ai-ceo/instances/default/logs` |
+| Storage | `~/.ai-ceo/instances/default/data/storage` |
+| Secrets key | `~/.ai-ceo/instances/default/secrets/master.key` |
 
 Override with:
 
 ```sh
-PAPERCLIP_HOME=/custom/home PAPERCLIP_INSTANCE_ID=dev pnpm paperclipai run
+AI_CEO_HOME=/custom/home AI_CEO_INSTANCE_ID=dev pnpm ai-ceo run
 ```
 
 Or pass `--data-dir` directly on any command:
 
 ```sh
-pnpm paperclipai run --data-dir ./tmp/paperclip-dev
-pnpm paperclipai doctor --data-dir ./tmp/paperclip-dev
+pnpm ai-ceo run --data-dir ./tmp/ai-ceo-dev
+pnpm ai-ceo doctor --data-dir ./tmp/ai-ceo-dev
 ```

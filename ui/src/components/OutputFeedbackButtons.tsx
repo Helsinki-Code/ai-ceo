@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { FeedbackDataSharingPreference, FeedbackVoteValue } from "@paperclipai/shared";
+import type { FeedbackDataSharingPreference, FeedbackVoteValue } from "@ai-ceo/shared";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -188,7 +188,7 @@ export function OutputFeedbackButtons({
           <DialogHeader>
             <DialogTitle>Save your feedback sharing preference</DialogTitle>
             <DialogDescription>
-              Choose whether voted AI outputs can be shared with Paperclip Labs. This
+              Choose whether voted AI outputs can be shared with AI CEO Labs. This
               answer becomes the default for future thumbs up and thumbs down votes.
             </DialogDescription>
           </DialogHeader>

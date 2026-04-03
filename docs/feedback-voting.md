@@ -1,6 +1,6 @@
 # Feedback Voting — Local Data Guide
 
-When you rate an agent's response with **Helpful** (thumbs up) or **Needs work** (thumbs down), Paperclip saves your vote locally alongside your running instance. This guide covers what gets stored, how to access it, and how to export it.
+When you rate an agent's response with **Helpful** (thumbs up) or **Needs work** (thumbs down), AI CEO saves your vote locally alongside your running instance. This guide covers what gets stored, how to access it, and how to export it.
 
 ## How voting works
 
@@ -17,29 +17,29 @@ Each vote creates two local records:
 | **Vote** | Your vote (up/down), optional reason text, sharing preference, consent version, timestamp |
 | **Trace bundle** | Full context snapshot: the voted-on comment/revision text, issue title, agent info, your vote, and reason — everything needed to understand the feedback in isolation |
 
-All data lives in your local Paperclip database. Nothing leaves your machine unless you explicitly choose to share.
+All data lives in your local AI CEO database. Nothing leaves your machine unless you explicitly choose to share.
 
-When a vote is marked for sharing, Paperclip also queues the trace bundle for background export through the Telemetry Backend. The app server never uploads raw feedback trace bundles directly to object storage.
+When a vote is marked for sharing, AI CEO also queues the trace bundle for background export through the Telemetry Backend. The app server never uploads raw feedback trace bundles directly to object storage.
 
 ## Viewing your votes
 
 ### Quick report (terminal)
 
 ```bash
-pnpm paperclipai feedback report
+pnpm ai-ceo feedback report
 ```
 
 Shows a color-coded summary: vote counts, per-trace details with reasons, and export statuses.
 
 ```bash
 # Installed CLI
-paperclipai feedback report
+ai-ceo feedback report
 
 # Point to a different server or company
-pnpm paperclipai feedback report --api-base http://127.0.0.1:3000 --company-id <company-id>
+pnpm ai-ceo feedback report --api-base http://127.0.0.1:3000 --company-id <company-id>
 
 # Include raw payload dumps in the report
-pnpm paperclipai feedback report --payloads
+pnpm ai-ceo feedback report --payloads
 ```
 
 ### API endpoints
@@ -89,7 +89,7 @@ The trace endpoints accept query parameters:
 ### Export to files + zip
 
 ```bash
-pnpm paperclipai feedback export
+pnpm ai-ceo feedback export
 ```
 
 Creates a timestamped directory with:
@@ -100,7 +100,7 @@ feedback-export-20260331T120000Z/
   votes/
     PAP-123-a1b2c3d4.json      # vote metadata (one per vote)
   traces/
-    PAP-123-e5f6g7h8.json      # Paperclip feedback envelope (one per trace)
+    PAP-123-e5f6g7h8.json      # AI CEO feedback envelope (one per trace)
   full-traces/
     PAP-123-e5f6g7h8/
       bundle.json              # full export manifest for the trace
@@ -108,11 +108,11 @@ feedback-export-20260331T120000Z/
 feedback-export-20260331T120000Z.zip
 ```
 
-Exports are full by default. `traces/` keeps the Paperclip envelope, while `full-traces/` contains the richer per-trace bundle plus any recoverable adapter-native files.
+Exports are full by default. `traces/` keeps the AI CEO envelope, while `full-traces/` contains the richer per-trace bundle plus any recoverable adapter-native files.
 
 ```bash
 # Custom server and output directory
-pnpm paperclipai feedback export --api-base http://127.0.0.1:3000 --company-id <company-id> --out ./my-export
+pnpm ai-ceo feedback export --api-base http://127.0.0.1:3000 --company-id <company-id> --out ./my-export
 ```
 
 ### Reading an exported trace

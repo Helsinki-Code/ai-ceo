@@ -328,7 +328,7 @@ export type {
   PluginLauncherDeclaration,
   PluginMinimumHostVersion,
   PluginUiDeclaration,
-  PaperclipPluginManifestV1,
+  AICEOPluginManifestV1,
   PluginRecord,
   PluginStateRecord,
   PluginConfig,
@@ -613,7 +613,7 @@ export {
 } from "./routine-variables.js";
 
 export {
-  paperclipConfigSchema,
+  aiCEOConfigSchema,
   configMetaSchema,
   llmConfigSchema,
   databaseBackupConfigSchema,
@@ -628,7 +628,7 @@ export {
   secretsLocalEncryptedConfigSchema,
   telemetryConfigSchema,
   type TelemetryConfig,
-  type PaperclipConfig,
+  type AICEOConfig,
   type LlmConfig,
   type DatabaseBackupConfig,
   type DatabaseConfig,

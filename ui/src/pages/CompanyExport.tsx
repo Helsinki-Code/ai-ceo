@@ -7,7 +7,7 @@ import type {
   CompanyPortabilityExportResult,
   CompanyPortabilityManifest,
   Project,
-} from "@paperclipai/shared";
+} from "@ai-ceo/shared";
 import { useNavigate, useLocation } from "@/lib/router";
 import { useCompany } from "../context/CompanyContext";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
@@ -72,12 +72,12 @@ function checkedSlugs(checkedFiles: Set<string>): {
 }
 
 /**
- * Filter .paperclip.yaml content so it only includes entries whose
+ * Filter .ai-ceo.yaml content so it only includes entries whose
  * corresponding files are checked. Works by line-level YAML parsing
  * since the file has a known, simple structure produced by our own
  * renderYamlBlock.
  */
-function filterPaperclipYaml(yaml: string, checkedFiles: Set<string>): string {
+function filterAICEOYaml(yaml: string, checkedFiles: Set<string>): string {
   const slugs = checkedSlugs(checkedFiles);
   const lines = yaml.split("\n");
   const out: string[] = [];
@@ -429,7 +429,7 @@ function generateReadmeFromSelection(
 
   lines.push("## What's Inside");
   lines.push("");
-  lines.push("This is an [Agent Company](https://paperclip.ing) package.");
+  lines.push("This is an [Agent Company](https://ai-ceo.ing) package.");
   lines.push("");
 
   const counts: Array<[string, number]> = [];
@@ -473,13 +473,13 @@ function generateReadmeFromSelection(
   lines.push("## Getting Started");
   lines.push("");
   lines.push("```bash");
-  lines.push("pnpm paperclipai company import this-github-url-or-folder");
+  lines.push("pnpm ai-ceo company import this-github-url-or-folder");
   lines.push("```");
   lines.push("");
-  lines.push("See [Paperclip](https://paperclip.ing) for more information.");
+  lines.push("See [AI CEO](https://ai-ceo.ing) for more information.");
   lines.push("");
   lines.push("---");
-  lines.push(`Exported from [Paperclip](https://paperclip.ing) on ${new Date().toISOString().split("T")[0]}`);
+  lines.push(`Exported from [AI CEO](https://ai-ceo.ing) on ${new Date().toISOString().split("T")[0]}`);
   lines.push("");
 
   return lines.join("\n");
@@ -775,16 +775,16 @@ export function CompanyExport() {
     };
   }, [tree, treeSearch, checkedFiles, taskLimit]);
 
-  // Recompute .paperclip.yaml and README.md content whenever checked files
+  // Recompute .ai-ceo.yaml and README.md content whenever checked files
   // change so the preview & download always reflect the current selection.
   const effectiveFiles = useMemo(() => {
     if (!exportData) return {} as Record<string, CompanyPortabilityFileEntry>;
     const filtered = { ...exportData.files };
 
-    // Filter .paperclip.yaml
-    const yamlPath = exportData.paperclipExtensionPath;
+    // Filter .ai-ceo.yaml
+    const yamlPath = exportData.aiCeoExtensionPath;
     if (yamlPath && typeof exportData.files[yamlPath] === "string") {
-      filtered[yamlPath] = filterPaperclipYaml(exportData.files[yamlPath], checkedFiles);
+      filtered[yamlPath] = filterAICEOYaml(exportData.files[yamlPath], checkedFiles);
     }
 
     // Regenerate README.md based on checked selection

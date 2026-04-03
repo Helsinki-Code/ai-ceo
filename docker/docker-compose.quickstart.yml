@@ -1,18 +1,18 @@
 services:
-  paperclip:
+  ai-ceo:
     build:
       context: ..
       dockerfile: Dockerfile
     ports:
-      - "${PAPERCLIP_PORT:-3100}:3100"
+      - "${AI_CEO_PORT:-3100}:3100"
     environment:
       HOST: "0.0.0.0"
-      PAPERCLIP_HOME: "/paperclip"
+      AI_CEO_HOME: "/ai-ceo"
       OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
       ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
-      PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
-      PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
-      PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://localhost:3100}"
+      AI_CEO_DEPLOYMENT_MODE: "authenticated"
+      AI_CEO_DEPLOYMENT_EXPOSURE: "private"
+      AI_CEO_PUBLIC_URL: "${AI_CEO_PUBLIC_URL:-http://localhost:3100}"
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}"
     volumes:
-      - "${PAPERCLIP_DATA_DIR:-../data/docker-paperclip}:/paperclip"
+      - "${AI_CEO_DATA_DIR:-../data/docker-ai-ceo}:/ai-ceo"

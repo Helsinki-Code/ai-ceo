@@ -1,4 +1,4 @@
-import type { FeedbackTraceBundle } from "@paperclipai/shared";
+import type { FeedbackTraceBundle } from "@ai-ceo/shared";
 import type { Config } from "../config.js";
 
 function buildFeedbackShareObjectKey(bundle: FeedbackTraceBundle, exportedAt: Date) {
