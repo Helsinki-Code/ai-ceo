@@ -79,4 +79,4 @@ VOLUME ["/ai-ceo"]
 EXPOSE 3100
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["node", "--max-old-space-size=400", "server/dist/index.js"]
+CMD ["node", "--max-old-space-size=400", "--import", "./server/node_modules/tsx/dist/loader.mjs", "server/dist/index.js"]
