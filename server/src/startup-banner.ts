@@ -71,7 +71,7 @@ function resolveAgentJwtSecretStatus(
   status: "pass" | "warn";
   message: string;
 } {
-  const envValue = process.env.AI_CEO_AGENT_JWT_SECRET?.trim();
+  const envValue = (process.env.AI_CEO_AGENT_JWT_SECRET ?? process.env.AI_CEO_AGENT_JWT_KEY)?.trim();
   if (envValue) {
     return {
       status: "pass",
@@ -81,7 +81,8 @@ function resolveAgentJwtSecretStatus(
 
   if (existsSync(envFilePath)) {
     const parsed = parseEnvFileContents(readFileSync(envFilePath, "utf-8"));
-    const fileValue = typeof parsed.AI_CEO_AGENT_JWT_SECRET === "string" ? parsed.AI_CEO_AGENT_JWT_SECRET.trim() : "";
+    const fileValue = typeof parsed.AI_CEO_AGENT_JWT_SECRET === "string" ? parsed.AI_CEO_AGENT_JWT_SECRET.trim() :
+      typeof parsed.AI_CEO_AGENT_JWT_KEY === "string" ? parsed.AI_CEO_AGENT_JWT_KEY.trim() : "";
     if (fileValue) {
       return {
         status: "warn",

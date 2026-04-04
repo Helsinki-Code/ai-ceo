@@ -26,7 +26,7 @@ function parseNumber(value: string | undefined, fallback: number) {
 }
 
 function jwtConfig() {
-  const secret = process.env.AI_CEO_AGENT_JWT_SECRET;
+  const secret = process.env.AI_CEO_AGENT_JWT_SECRET ?? process.env.AI_CEO_AGENT_JWT_KEY;
   if (!secret) return null;
 
   return {
