@@ -1,5 +1,6 @@
 /// <reference path="./types/express.d.ts" />
 import { existsSync, readFileSync, rmSync } from "node:fs";
+import { createHash, randomBytes } from "node:crypto";
 import { createServer } from "node:http";
 import { resolve } from "node:path";
 import { createInterface } from "node:readline/promises";
@@ -22,6 +23,7 @@ import {
   companies,
   companyMemberships,
   instanceUserRoles,
+  invites,
 } from "@ai-ceo/db";
 import detectPort from "detect-port";
 import { createApp } from "./app.js";
@@ -728,6 +730,36 @@ export async function startServer(): Promise<StartedServer> {
     });
   });
   
+  // Auto-bootstrap: if AI_CEO_BOOTSTRAP_SECRET is set and no admin exists, print invite URL to logs
+  if (process.env.AI_CEO_BOOTSTRAP_SECRET && config.deploymentMode === "authenticated") {
+    try {
+      const adminCount = await (db as any)
+        .select()
+        .from(instanceUserRoles)
+        .where(eq(instanceUserRoles.role, "instance_admin"))
+        .then((rows: unknown[]) => rows.length);
+      if (adminCount === 0) {
+        const token = `pcp_bootstrap_${randomBytes(24).toString("hex")}`;
+        const tokenHash = createHash("sha256").update(token).digest("hex");
+        await (db as any).insert(invites).values({
+          inviteType: "bootstrap_ceo",
+          tokenHash,
+          allowedJoinTypes: "human",
+          expiresAt: new Date(Date.now() + 72 * 60 * 60 * 1000),
+          invitedByUserId: "system",
+        });
+        const baseUrl = (config.authPublicBaseUrl ?? `http://localhost:${listenPort}`).replace(/\/+$/, "");
+        const inviteUrl = `${baseUrl}/invite/${token}`;
+        console.log(`\n\x1b[42m\x1b[30m  BOOTSTRAP INVITE (expires 72h)  \x1b[0m`);
+        console.log(`\x1b[36m  ${inviteUrl}  \x1b[0m\n`);
+      } else {
+        logger.info("AI_CEO_BOOTSTRAP_SECRET set but admin already exists — skipping bootstrap invite");
+      }
+    } catch (err) {
+      logger.error({ err }, "Failed to auto-generate bootstrap invite");
+    }
+  }
+
   {
     const shutdown = async (signal: "SIGINT" | "SIGTERM") => {
       const telemetryClient = getTelemetryClient();

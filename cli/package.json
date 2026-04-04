@@ -4,7 +4,7 @@
   "description": "AI CEO CLI — orchestrate AI agent teams to run a business",
   "type": "module",
   "bin": {
-    "ai-ceo": "./dist/index.js"
+    "ai-ceo": "dist/index.js"
   },
   "keywords": [
     "ai-ceo",
